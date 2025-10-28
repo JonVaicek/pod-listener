@@ -9,7 +9,8 @@
 #include <unistd.h>
 
 #define MAXLINE 1024
-#define PORT 10501
+#define UDP_PORT 9982
+#define TCP_PORT 10501
 
 
 bool isWSL() {
@@ -48,7 +49,7 @@ int tcp_server(void) {
     // Bind to localhost:10501
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_port = htons(TCP_PORT);
 
     if (bind(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("bind failed");
@@ -61,7 +62,7 @@ int tcp_server(void) {
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "TCP Server listening on 127.0.0.1:" << PORT << std::endl;
+    std::cout << "TCP Server listening on 127.0.0.1:" << TCP_PORT << std::endl;
 
     socklen_t len = sizeof(cliaddr);
     newsockfd = accept(sockfd, (struct sockaddr *)&cliaddr, &len);
@@ -110,7 +111,7 @@ int udp_server(void){
     servaddr.sin_family    = AF_INET; // IPv4 
     servaddr.sin_addr.s_addr = INADDR_ANY; 
     
-    servaddr.sin_port = htons(PORT); 
+    servaddr.sin_port = htons(UDP_PORT); 
       
     // Bind the socket with the server address 
     if ( bind(sockfd, (const struct sockaddr *)&servaddr,  
