@@ -142,9 +142,15 @@ int udp_server(void){
 int main(void){
 
     std::cout << "Hello World\n";
-    if(isWSL())
+    if(isWSL()){
         std::cout << "Running on WSL\n";
-    //udp_server();
-    tcp_server();
+        tcp_server();
+    }
+    else{
+        std::cout << "Running on Linux\n";
+        udp_server();
+    }
+        
+    //
     return 0;
 }
