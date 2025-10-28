@@ -64,24 +64,28 @@ int tcp_server(void) {
 
     std::cout << "TCP Server listening on 127.0.0.1:" << TCP_PORT << std::endl;
 
-    socklen_t len = sizeof(cliaddr);
-    newsockfd = accept(sockfd, (struct sockaddr *)&cliaddr, &len);
-    if (newsockfd < 0) {
-        perror("accept failed");
-        close(sockfd);
-        exit(EXIT_FAILURE);
+    while(true){
+        socklen_t len = sizeof(cliaddr);
+        newsockfd = accept(sockfd, (struct sockaddr *)&cliaddr, &len);
+        if (newsockfd < 0) {
+            perror("accept failed");
+            close(sockfd);
+            exit(EXIT_FAILURE);
+        }
+
+        std::cout << "Client connected." << std::endl;
+
+        // Read data
+        int n = read(newsockfd, buffer, MAXLINE - 1);
+        if (n > 0) {
+            buffer[n] = '\0';
+            std::cout << "Client: " << buffer << std::endl;
+        }
+
+        close(newsockfd);
+        std::cout << "Client Disconnected\n";
     }
 
-    std::cout << "Client connected." << std::endl;
-
-    // Read data
-    int n = read(newsockfd, buffer, MAXLINE - 1);
-    if (n > 0) {
-        buffer[n] = '\0';
-        std::cout << "Client: " << buffer << std::endl;
-    }
-
-    close(newsockfd);
     close(sockfd);
     return 0;
 }
@@ -122,20 +126,15 @@ int udp_server(void){
     } 
       
     socklen_t len;
-  int n; 
-  
-    len = sizeof(cliaddr);  //len is value/result 
-  
-    n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
+    int n; 
+    while(true){
+        len = sizeof(cliaddr);  //len is value/result 
+        n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
                 0, ( struct sockaddr *) &cliaddr, 
                 &len); 
-    buffer[n] = '\0'; 
-    printf("Client : %s\n", buffer); 
-    sendto(sockfd, (const char *)hello, strlen(hello),  
-        MSG_CONFIRM, (const struct sockaddr *) &cliaddr, 
-            len); 
-    std::cout<<"Hello message sent."<<std::endl;  
-      
+        buffer[n] = '\0';
+        printf("Client : %s\n", buffer);
+    }     
     return 0; 
 }
 

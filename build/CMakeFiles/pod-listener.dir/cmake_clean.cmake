@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/pod-listener.dir/src/main.cpp.o"
+  "CMakeFiles/pod-listener.dir/src/main.cpp.o.d"
   "pod-listener"
   "pod-listener.pdb"
 )
